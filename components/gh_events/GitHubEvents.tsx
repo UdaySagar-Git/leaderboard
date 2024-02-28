@@ -3,6 +3,7 @@
 import { IGitHubEvent, combineSimilarPushEvents } from "@/lib/gh_events";
 import { useEffect, useState } from "react";
 import GitHubEvent from "./GitHubEvent";
+import { env } from "@/env.mjs";
 
 const exludeBotEvents = (event: IGitHubEvent) => {
   return !event.actor.login.includes("bot");
@@ -27,7 +28,7 @@ export default function GitHubEvents({ minimal }: { minimal?: boolean }) {
 
   useEffect(() => {
     fetch(
-      `https://api.github.com/orgs/${process.env.NEXT_PUBLIC_GITHUB_ORG}/events?per_page=100&page=${page}`,
+      `https://api.github.com/orgs/${env.NEXT_PUBLIC_GITHUB_ORG}/events?per_page=100&page=${page}`,
     )
       .then((res) => res.json())
       .then((data) =>
@@ -41,7 +42,7 @@ export default function GitHubEvents({ minimal }: { minimal?: boolean }) {
 
   return (
     <div className="flow-root">
-      <ul role="list" className="space-y-4 flex flex-col gap-4 mt-4 -mb-8">
+      <ul role="list" className="-mb-8 mt-4 flex flex-col gap-4 space-y-4">
         {events ? (
           events.map((e) => <GitHubEvent key={e.id} event={e} />)
         ) : (

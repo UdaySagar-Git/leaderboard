@@ -5,6 +5,7 @@ import { IGitHubEvent, combineSimilarPushEvents } from "@/lib/gh_events";
 import { useEffect, useState } from "react";
 import { scrollTo } from "@/lib/utils";
 import LoadingText from "@/components/LoadingText";
+import { env } from "@/env.mjs";
 
 type Props = {
   searchParams: {
@@ -39,7 +40,7 @@ export default function FeedPage({ searchParams }: Props) {
 
   useEffect(() => {
     fetch(
-      `https://api.github.com/orgs/${process.env.NEXT_PUBLIC_GITHUB_ORG}/events?per_page=1000&page=${lastFetchedPage}`,
+      `https://api.github.com/orgs/${env.NEXT_PUBLIC_GITHUB_ORG}/events?per_page=1000&page=${lastFetchedPage}`,
     )
       .then((res) => res.json())
       .then((data: IGitHubEvent[]) => {
@@ -55,7 +56,7 @@ export default function FeedPage({ searchParams }: Props) {
           scrollTo(`gh-event-${lastEvents[lastEvents.length - 1].id}`);
         }
       });
-  }, [lastFetchedPage, events]);
+  }, [events, lastFetchedPage]);
 
   const allEvents = ([] as IGitHubEvent[]).concat(...Object.values(events));
 
@@ -64,16 +65,16 @@ export default function FeedPage({ searchParams }: Props) {
   }
 
   return (
-    <div className="flow-root max-w-4xl mx-auto my-8 relative">
-      <h1 className="text-primary-500 dark:text-white text-4xl">Feed</h1>
-      <ul role="list" className="space-y-4 flex flex-col gap-4 mt-10 mb-20">
+    <div className="relative mx-auto my-8 flow-root max-w-4xl p-4">
+      <h1 className="text-4xl text-primary-500 dark:text-white">Feed</h1>
+      <ul role="list" className="mb-20 mt-10 flex flex-col gap-4 space-y-4">
         {allEvents.map((e) => (
           <GitHubEvent key={e.id} event={e} />
         ))}
       </ul>
       <div className="flex flex-row justify-center">
         <span
-          className="underline cursor-pointer"
+          className="cursor-pointer underline"
           onClick={() => setLastFetchedPage((p) => p + 1)}
         >
           Show more
