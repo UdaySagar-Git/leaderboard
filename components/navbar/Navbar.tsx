@@ -8,6 +8,7 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
 import { usePathname } from "next/navigation";
 import Link from "next/link";
+import Profile from "./Profile";
 
 const MenuItems = {
   "/leaderboard": "Leaderboard",
@@ -17,7 +18,7 @@ const MenuItems = {
   "/releases": "Releases",
 };
 
-export default function Navbar() {
+export default function Navbar({session}) {
   const [open, setOpen] = useState(false);
   const pathname = usePathname();
   return (
@@ -49,6 +50,9 @@ export default function Navbar() {
             </div>
             <div className="hidden md:block">
               <ThemeSwitch />
+            </div>
+            <div className="px-2">
+              <Profile session={session}/>
             </div>
             <div
               className="flex cursor-pointer items-center justify-center text-3xl transition-transform duration-300 ease-in-out lg:hidden"

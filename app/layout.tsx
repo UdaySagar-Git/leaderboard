@@ -6,6 +6,7 @@ import Footer from "../components/Footer";
 import Navbar from "@/components/navbar/Navbar";
 import Provider from "./provider";
 import { env } from "@/env.mjs";
+import { getUserSession } from "@/lib/session";
 
 export const metadata: Metadata = {
   title: env.NEXT_PUBLIC_PAGE_TITLE,
@@ -18,17 +19,18 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const session = await getUserSession();
   return (
     <html lang="en">
       <body className="bg-background text-foreground">
         <div>
           <Provider>
-            <Navbar />
+            <Navbar session={session} />
             {children}
             <Footer />
           </Provider>
